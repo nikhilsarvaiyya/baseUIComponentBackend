@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 })
 
 // Database Connection ------------------------------------------------------------------------------------
-let db = config.DATABASE_PATH+"/"+config.DATABASE_NAME;
+let db = config.DATABASE_PATH + "/" + config.DATABASE_NAME;
 
 mongoose
   .connect(db, {
@@ -56,9 +56,13 @@ const io = require('socket.io')(http, {
 
 io.on('connection', (socket) => {
   console.log('Socket IO connected');
-  socket.on('disconnect', () => {
-    console.log('Socket IO disconnected');
+  socket.on('disconnect', (reason) => {
+    console.log('Socket IO disconnected', reason);
   });
+  socket.on('error', (err) => {
+    console.log("Error: " + err);
+  });
+  socket.on('cmd', cmd => onCommand(socket, cmd));
 });
 
 
@@ -98,3 +102,31 @@ http.listen(config.PORT, () => {
 })
 
 
+
+function onCommand( socket, cmd ) {
+  console.log( 'cmd:' + cmd.type );
+
+  switch( cmd.type ) {
+    // snapshot sending to specific client on request
+    case 'snap':
+      items.forEach( i =>
+        socket.emit( 'event', { type: 'itemadded', data: i } )
+      );
+      break;
+    // data changes are broadcast for all clients
+    case 'additem':
+      items.push( cmd.data );
+      io.emit( 'event', { type: 'itemadded', data: cmd.data } );
+      break;
+    case 'updateitem':
+      const item = items.find( i => i.id === cmd.data.id );
+      item.value = cmd.data.value;
+      io.emit( 'event', { type: 'itemupdated', data: item } );
+      break;
+    case 'delitem':
+      const idx = items.findIndex( i => i.id === cmd.data.id );
+      items.splice( idx, 1 );
+      io.emit( 'event', { type: 'itemdeleted', data: cmd.data.id } );
+      break;
+  }
+}
