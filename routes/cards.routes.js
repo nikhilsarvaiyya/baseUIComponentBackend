@@ -34,24 +34,30 @@ cardRoute.delete('/delete-card/:id',async(req, res, next) => {
     })
 	} catch {
 		res.status(404)
-		res.send({ error: "Card doesn't exist!" })
+		res.send({ error: "Id doesn't exist!" })
 	}
 })
 
-// // Update Card
-// cardRoute.route('/update-book/:id').put((req, res, next) => {
-//     Card.findByIdAndUpdate(req.params.id, {
-//     $set: req.body
-//   }, (error, data) => {
-//     if (error) {
-//       return next(error);
-//     
-//     } else {
-//       res.json(data)
-//     
-//     }
-//   })
-// })
+// Update Card
+
+
+cardRoute.put('/update-card/:id', async (req, res, next) => {
+
+  try {
+    await Card.findByIdAndUpdate({ _id: req.params.id },req.body)
+		res.status(200).send(req.body)
+	} catch {
+		res.status(404)
+		res.send({ error: "Id doesn't exist!" })
+	}
+
+  // await Card.findByIdAndUpdate(
+  //   { _id: req.params.id },
+  //   {
+  //     title: "Backend Developer",
+  //   },
+  // )
+})
 
 
 
