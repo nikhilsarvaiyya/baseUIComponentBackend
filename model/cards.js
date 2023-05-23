@@ -11,6 +11,9 @@ let Card = new Schema({
     type: String
   }
 }, {
-  collection: 'cards'
+  timestamps: true
+},
+{
+  collection: 'cards',
 })
 module.exports = mongoose.model('Card', Card)
