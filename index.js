@@ -71,7 +71,9 @@ io.on('connection', (socket) => {
 // Api Routes Connetions------------------------------------------------------------------------------------
 const cardRoute = require('./routes/cards.routes')
 const iconRoute = require('./routes/icons.routes')
+const cardDetailRoute = require('./routes/cardsDetail.routes.js')
 app.use('/api', cardRoute)
+app.use('/api', cardDetailRoute)
 app.use('/api', iconRoute)
 
 

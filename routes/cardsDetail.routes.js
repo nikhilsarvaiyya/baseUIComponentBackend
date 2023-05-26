@@ -1,31 +1,39 @@
 const express = require('express');
-const cardRoute = express.Router();
+const cardDetailRoute = express.Router();
 const { ObjectId } = require('mongodb');
 
-let CardDetail = require('../model/cards');
+let CardDetail = require('../model/cardsDetail');
 
 // Add CardDetail
-cardRoute.post("/add-card", async (req, res) => {
+cardDetailRoute.post("/add-card-detail", async (req, res) => {
+  console.log("asdasd")
   const post = new CardDetail(req.body)
   await post.save()
   res.send(post)
 })
 
 // Get all CardDetail
-cardRoute.get('/', async (req, res) => { 
-  const allCard = await CardDetail.find();
-  res.status(200).send({response: {data : allCard}})
+cardDetailRoute.get('/menu', async (req, res) => { 
+  try {
+    const allCardDetail = await CardDetail.find().populate("uid");
+    res.status(200).send({response: {data : allCardDetail}})
+  } catch (err) {
+    console.log("Something is Wrong, " + err);
+    res.status(444).send("No risk found with the given criteria!");
+  }
+  
 })
 
+
 // Get CardDetail
-cardRoute.get('/read-card/:id', async (req, res) => {
+cardDetailRoute.get('/read-card-detail/:id', async (req, res) => {
   const objId = new ObjectId(req.params.id);
   const sendObject = await CardDetail.findOne({ _id: objId })
   res.send(sendObject)
 })
 
 // Delete CardDetail
-cardRoute.delete('/delete-card/:id', async (req, res, next) => {
+cardDetailRoute.delete('/delete-card-detail/:id', async (req, res, next) => {
   try {
     await CardDetail.deleteOne({ _id: req.params.id })
     res.status(200).send({
@@ -41,7 +49,7 @@ cardRoute.delete('/delete-card/:id', async (req, res, next) => {
 // Update CardDetail
 
 
-cardRoute.put('/update-card/:id', async (req, res, next) => {
+cardDetailRoute.put('/update-card-detail/:id', async (req, res, next) => {
 
   try {
     await CardDetail.findByIdAndUpdate({ _id: req.params.id }, req.body)
@@ -52,4 +60,4 @@ cardRoute.put('/update-card/:id', async (req, res, next) => {
   }
 })
 
-module.exports = cardRoute;
+module.exports = cardDetailRoute;

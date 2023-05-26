@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-let Card = new Schema({
+let CardSchema = new Schema({
+  key: {
+    type: String
+  },
   title: {
+    type: String
+  },
+  path: {
     type: String
   },
   icon: {
@@ -16,4 +22,4 @@ let Card = new Schema({
 {
   collection: 'cards',
 })
-module.exports = mongoose.model('Card', Card)
+module.exports = mongoose.model('Card', CardSchema)
