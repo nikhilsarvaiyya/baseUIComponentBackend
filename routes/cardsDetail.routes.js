@@ -6,7 +6,6 @@ let CardDetail = require('../model/cardsDetail');
 
 // Add CardDetail
 cardDetailRoute.post("/add-card-detail", async (req, res) => {
-  console.log("asdasd")
   const post = new CardDetail(req.body)
   await post.save()
   res.send(post)
@@ -41,6 +40,7 @@ cardDetailRoute.delete('/delete-card-detail/:id', async (req, res, next) => {
       msg: "Data Deleted Successfully!"
     })
   } catch {
+
     res.status(404)
     res.send({ error: "Id doesn't exist!" })
   }
