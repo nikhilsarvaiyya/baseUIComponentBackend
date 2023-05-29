@@ -5,6 +5,13 @@ let CardDetailSchema = new Schema({
   menu: {
     type: String
   },
+  isActive: {
+    default:true,
+    type: Boolean
+  },
+  history: {
+    type: Array
+  },
   html: {
     type: String
   },

@@ -1,6 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 let CardSchema = new Schema({
+  isActive: {
+    default:true,
+    type: Boolean
+  },
+  history: {
+    type: Array
+  },
   key: {
     type: String
   },
@@ -15,7 +22,8 @@ let CardSchema = new Schema({
   },
   description: {
     type: String
-  }
+  },
+  
 }, {
   timestamps: true
 },
